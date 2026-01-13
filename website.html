@@ -1,0 +1,169 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Click Counter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --accent: #22c55e;
+      --accent-dark: #16a34a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(1200px 600px at 50% 10%, #1f2937 0%, var(--bg) 60%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    .card {
+      width: 92%;
+      max-width: 520px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 28px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.6rem;
+      letter-spacing: 0.2px;
+    }
+
+    .sub {
+      margin: 0 0 20px;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .score {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin: 14px 0 24px;
+    }
+
+    .score label {
+      color: #94a3b8;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+
+    .score-value {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(90deg, #7dd3fc, #a7f3d0, #86efac);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 10px rgba(134, 239, 172, 0.15);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      transition: transform 120ms ease, box-shadow 180ms ease, background 160ms ease;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #062b16;
+      box-shadow: 0 8px 16px rgba(34, 197, 94, 0.4);
+    }
+    .primary:hover { background: var(--accent-dark); transform: translateY(-2px); }
+    .primary:active { transform: translateY(0); }
+
+    .secondary {
+      background: #0b1220;
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .secondary:hover { background: #0d1424; }
+
+    .hint {
+      margin-top: 16px;
+      color: #94a3b8;
+      font-size: 0.88rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" role="main" aria-label="Click counter">
+    <h1>Click counter</h1>
+    <p class="sub">Click the button to increase your score. Simple, satisfying, and a little addictive.</p>
+
+    <div class="score" aria-live="polite">
+      <label for="score">Score</label>
+      <div id="score" class="score-value">0</div>
+    </div>
+
+    <div class="actions">
+      <button id="clickBtn" class="primary" aria-label="Click to increase score">Click Me!</button>
+      <button id="resetBtn" class="secondary" aria-label="Reset score to zero">Reset</button>
+    </div>
+
+    <p class="hint">Tip: Your score saves automatically in this browser.</p>
+  </main>
+
+  <script>
+    // Persist score in localStorage
+    const scoreEl = document.getElementById('score');
+    const clickBtn = document.getElementById('clickBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    const getScore = () => Number(localStorage.getItem('score') || 0);
+    const setScore = (val) => localStorage.setItem('score', String(val));
+
+    function render(val) {
+      scoreEl.textContent = val;
+    }
+
+    // Initialize
+    let score = getScore();
+    render(score);
+
+    // Increment on click
+    clickBtn.addEventListener('click', () => {
+      score += 1;
+      setScore(score);
+      render(score);
+      // Small visual feedback
+      clickBtn.style.transform = 'translateY(-2px)';
+      setTimeout(() => (clickBtn.style.transform = ''), 120);
+    });
+
+    // Reset
+    resetBtn.addEventListener('click', () => {
+      score = 0;
+      setScore(score);
+      render(score);
+    });
+  </script>
+</body>
+</html>
